@@ -118,7 +118,7 @@ public class Giao_Dien_Dang_Nhap_Nguoi_Dung extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Chưa nhập Tên đăng nhập hoặc Mật khẩu.");
         }
         else {
-            if(txt_TenDN.getText().equals(getTenDangNhapAdmin()) && txtMk.getPassword().equals(getMatKhauAdmin())){
+            if(txt_TenDN.getText().equals(getTenDangNhapAdmin()) && txtMk.getText().equals(getMatKhauAdmin())){
                 Giao_Dien_MoMay a= new Giao_Dien_MoMay();
                 JOptionPane.showMessageDialog(rootPane, "Đăng nhập thành công.");
                 a.setVisible(true);

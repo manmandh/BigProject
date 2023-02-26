@@ -24,11 +24,7 @@ public class Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi extends javax.swing.JFrame {
         dsNguoiChoi=new Ds_Nguoi_choi();
         myInit();
         tbQuanLiQuanNet.setVisible(true);
-        try {
-            NapDuLieu();
-        } catch (Exception ex) {
-            Logger.getLogger(Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        updateTable();
     }
 
     @SuppressWarnings("unchecked")
@@ -317,7 +313,9 @@ public class Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi extends javax.swing.JFrame {
         int money = Integer.parseInt(txtNapTien.getText());
         Nguoi_choi nguoi_choi = new Nguoi_choi(id, username, password, money);
         System.out.println(nguoi_choi);
-        PlayerDAO.addPlayer(nguoi_choi);
+        if(!PlayerDAO.addPlayer(nguoi_choi)){
+            JOptionPane.showMessageDialog(rootPane, "Lỗi.");
+        }
         this.updateTable();
 
     }//GEN-LAST:event_buttonThemMoiActionPerformed
@@ -388,11 +386,7 @@ public class Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi extends javax.swing.JFrame {
     private void buttonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRefreshActionPerformed
         // TODO add your handling code here:
         Setvaluenull();
-        try {
-            NapDuLieu();
-        } catch (Exception ex) {
-            Logger.getLogger(Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.updateTable();
     }//GEN-LAST:event_buttonRefreshActionPerformed
 
     private void tbQuanLiQuanNetKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbQuanLiQuanNetKeyPressed
@@ -413,43 +407,20 @@ public class Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi extends javax.swing.JFrame {
 
     private void butt_NapTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butt_NapTienActionPerformed
         // TODO add your handling code here:
-        if (!txtNapTien.getText().isEmpty()) {
+        if (!txtNapTien.getText().isEmpty() && !txtID.getText().isEmpty()) {
             try {
                 int Tien = Integer.parseInt(txtNapTien.getText());
-                Reader reader = new FileReader("ThongTinNguoiChoi.txt");
-                BufferedReader bufferedReader = new BufferedReader(reader);
-                String Str = "";
-                try {
-                    while (bufferedReader.ready()) {
-                        Str += bufferedReader.readLine() + " ";
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                String[] split = Str.split(" ");
-                System.out.println(Arrays.toString(split));
-                for (int i = 0; i < split.length; ++i) {
-                    if (split[i].equals(txtID.getText())) {
-                        Tien += Integer.parseInt(split[i+3]);
-                        split[i+3] = String.valueOf(Tien);
-                        break;
-                    }
-                }  try {
-                    Ghi_file(split);
+                int id = Integer.parseInt(txtID.getText());
+                if(PlayerDAO.napTien(id, Tien)){
                     JOptionPane.showMessageDialog(rootPane, "Nạp tiền thành công.");
-                    NapDuLieu();
-                } catch (Exception ex) {
-                    Logger.getLogger(Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi.class.getName()).log(Level.SEVERE, null, ex);
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "Nạp tiền không thành công.");
                 }
-                try {
-                    reader.close();
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi.class.getName()).log(Level.SEVERE, null, ex);
+                updateTable();
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(rootPane, "Nạp tiền không thành công.");
             }
+
         }
     }//GEN-LAST:event_butt_NapTienActionPerformed
     
@@ -499,31 +470,6 @@ public class Giao_Dien_Quan_Li_Thong_Tin_Nguoi_Choi extends javax.swing.JFrame {
         while(dtmNguoiChoi.getRowCount()>0){
             dtmNguoiChoi.removeRow(0);
         }
-    }
-    
-    private void Them() throws IOException {
-        Reader reader;
-        BufferedReader bufferedReader;
-        reader = new FileReader("ThongTinNguoiChoi.txt");
-        bufferedReader = new BufferedReader(reader);
-        while (bufferedReader.ready()) {
-            String Str = bufferedReader.readLine();
-            System.out.println(Str);
-            if (Str == null)
-                break;
-            String[] split = Str.split(" ");
-           if(split.length != 4) continue;
-            dtmNguoiChoi.addRow(new Object[]{
-                split[0],
-                split[1],
-                split[2],
-                split[3]
-            });
-        }
-    }
-    private void NapDuLieu() throws Exception{
-        XoaDuLieu();
-        Them();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

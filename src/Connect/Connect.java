@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import static java.sql.DriverManager.getConnection;
 public class Connect {
     private static Connection conn = null;
-    private static String DB_URL = "jdbc:mysql://localhost:3306/netshop-management";
+    private static String DB_URL = "jdbc:mysql://localhost:3306/netshop2";
     private static String USER_NAME = "root";
     private static String PASSWORD = "";
 

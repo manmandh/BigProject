@@ -56,11 +56,22 @@ public class PlayerDAO {
             ps.setInt(4, nguoi_choi.getNapTien());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-//            e.printStackTrace();
+            e.printStackTrace();// trùng id hay lỗi j đó nó báo ở đây
         }
         return false;
     }
-
+    public static boolean napTien(int id, int tien){
+        String sql = "UPDATE players SET money = money + ? WHERE id=?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, tien);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public static boolean delete(int id){
         String sql = "DELETE FROM players WHERE id=?";
         try {
@@ -85,7 +96,7 @@ public class PlayerDAO {
         return null;
     }
     public static boolean update(int id, Nguoi_choi nguoi_choi){
-        String sql = "UPDATE players set id=?,username=?, password=?," + "money=money+? where id=?  ";
+        String sql = "UPDATE players set id=?,username=?, password=?," + "money=? where id=?  ";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
